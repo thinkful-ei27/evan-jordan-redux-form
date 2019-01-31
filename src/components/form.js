@@ -1,5 +1,5 @@
 import React from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, SubmissionError } from 'redux-form';
 import './form.css';
 import { required, fiveLong, isNumber } from '../validators';
 import Input from './input';
@@ -19,11 +19,44 @@ export class Form extends React.Component {
         }
         return res.json().then(data => console.log(data));
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        const {reason, message, location} = err;
+        if (reason === 'ValidationError') {
+          return Promise.reject(
+            new SubmissionError({
+              [location]: message
+            })
+          );
+        }
+        return Promise.reject(
+          new SubmissionError({
+            _error: 'Error submitting form'
+          })
+        )
+      });
   }
   render() {
+    let successMessage;
+    if (this.props.submitSucceeded) {
+      successMessage = (
+        <div className="message message-success">
+          Form submitted Successfully!
+        </div>
+      );
+    }
+
+    let errorMessage;
+    if (this.props.error) {
+      errorMessage = (
+        <div className="message message-error">
+          {this.props.error} 
+        </div>
+      )
+    }
     return (
       <form onSubmit={this.props.handleSubmit(values => this.onSubmit(values))}>
+        {successMessage}
+        {errorMessage}
         <label htmlFor="trackingNumber">Tracking Number</label>
         <Field
           id="trackingNumber"
