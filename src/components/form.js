@@ -1,21 +1,24 @@
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import './form.css';
+import {required, fiveLong, isNumber} from '../validators'
 
 export class Form extends React.Component {
   onSubmit(values) {
     console.log(values);
   }
   render() {
+    console.log(this.props)
     return (
       <form>
         <label htmlFor="trackingNumber">Tracking Number</label>
         <Field
           id="trackingNumber"
           name="trackingNumber"
-          type="number"
+          type="text"
           className="trackingNumber"
           component="input"
+          validate={[required, fiveLong, isNumber]}
         />
         <label htmlFor="issue">What is your deal?!</label>
         <Field name="issue" className="issue" component="select">
