@@ -3,7 +3,7 @@ import { reduxForm, Field, SubmissionError } from 'redux-form';
 import './form.css';
 import { required, fiveLong, isNumber } from '../validators';
 import Input from './input';
-
+ 
 export class Form extends React.Component {
   onSubmit(values) {
     const url =
@@ -20,7 +20,7 @@ export class Form extends React.Component {
         return res.json().then(data => console.log(data));
       })
       .catch(err => {
-        const {reason, message, location} = err;
+        const { reason, message, location } = err;
         if (reason === 'ValidationError') {
           return Promise.reject(
             new SubmissionError({
@@ -49,7 +49,7 @@ export class Form extends React.Component {
     if (this.props.error) {
       errorMessage = (
         <div className="message message-error">
-          {this.props.error} 
+          {this.props.error}
         </div>
       )
     }
